@@ -26,7 +26,7 @@ function initialize() {
   // Setup the markers on the map
   var binacleMarker = new google.maps.Marker({
       position: cafe,
-      map: panorama,//map,
+      map: panorama,//map, I HAVE TO FIGURE OUT A WAY TO ADD THE MARKER TO BOTH THE MAP AND STREETVIEW PANO
       icon: 'xygifs/binacle.gif',//'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe|FFFF00',
       title: 'Binacle'//'cafe'
   });
