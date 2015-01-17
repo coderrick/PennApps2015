@@ -43,7 +43,7 @@ function initialize() {
       mapOptions);
 
   // Setup the markers on the map
-  var cafeMarker = new google.maps.Marker({
+  var binacleMarker = new google.maps.Marker({
       position: cafe,
       map: map,
       icon: 'xygifs/binacle.gif',//'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe|FFFF00',
@@ -72,6 +72,17 @@ function initialize() {
     heading: 265,
     pitch: 0
   }));
+  
+  var infowindow = new google.maps.InfoWindow({
+      content: "ROOAAAR!!!"
+  });
+  
+  google.maps.event.addListener(binacleMarker, 'mouseover', function() {
+    infowindow.setContent("ROOAAAR!!!");
+	//Trigger audio through howlerjs here
+	infowindow.open(panorama, binacleMarker);
+	console.log("the event was fired.");
+});
 }
 
 function toggleStreetView() {
@@ -82,6 +93,8 @@ function toggleStreetView() {
     panorama.setVisible(false);
   }
 }
+
+
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
