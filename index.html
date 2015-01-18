@@ -38,6 +38,27 @@
         padding: 5px;
         border: 1px solid #999;
       }
+	  #pac-input {
+        background-color: #fff;
+        padding: 0 11px 0 13px;
+        width: 400px;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        text-overflow: ellipsis;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+        margin-left: -1px;
+        padding-left: 14px;  /* Regular padding-left + 1. */
+        width: 401px;
+      }
+
+      .pac-container {
+        font-family: Roboto;
+      }
+
     </style>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -47,9 +68,7 @@
 	<script type="text/javascript" src="js/mapview.js"></script>
   </head>
   <body>
-    <div id="panel" style="margin-left:-100px">
-      <input type="button" value="Toggle Street View" onclick="toggleStreetView();"></input>
-    </div>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box"></input>
     <div id="map-canvas"></div>
 	<div id="pano-canvas"></div>
 	<script text="text/javascript" src="js/howler.min.js"></script>

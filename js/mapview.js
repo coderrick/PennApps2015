@@ -11,15 +11,16 @@ $.get( "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=39
   console.log( "Load was performed." + data);
 }, 'json');
 */
-
+var entryPanoId = null;
 function initialize() {
-
+var arenaBattle = new google.maps.LatLng(39.95080436904778, -75.19529539419557);
 	  // Set up the map
 	  var mapOptions = {
 		center: upenn,
 		zoom: 18,
 		streetViewControl: true
 	  };
+	  var markers = [];
 	  map = new google.maps.Map(document.getElementById('map-canvas'),
 		  mapOptions);
 	  
@@ -29,7 +30,56 @@ function initialize() {
 	   map.setStreetView(panorama);
 	   streetView = map.getStreetView();
 	   //streetView.setVisible( true );
-	
+		
+		//Searc Box code
+	  var input =(document.getElementById('pac-input'));
+	  panorama.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+	  var searchBox = new google.maps.places.SearchBox((input));
+
+	  // [START region_getplaces]
+	  // Listen for the event fired when the user selects an item from the
+	  // pick list. Retrieve the matching places for that item.
+	  google.maps.event.addListener(searchBox, 'places_changed', function() {
+	  map.setStreetView(panorama);
+		var places = searchBox.getPlaces();
+
+		if (places.length == 0) {
+		  return;
+		}
+		for (var i = 0, marker; marker = markers[i]; i++) {
+		  marker.setMap(null);
+		}
+
+		// For each place, get the icon, place name, and location.
+		markers = [];
+		var bounds = new google.maps.LatLngBounds();
+		for (var i = 0, place; place = places[i]; i++) {
+		  /* var image = {
+			url: place.icon,
+			size: new google.maps.Size(71, 71),
+			origin: new google.maps.Point(0, 0),
+			anchor: new google.maps.Point(17, 34),
+			scaledSize: new google.maps.Size(25, 25)
+		  }; */
+
+		  // Create a marker for each place.
+		  /* var marker = new google.maps.Marker({
+			map: map,
+			icon: image,
+			title: place.name,
+			position: place.geometry.location
+		  }); */
+
+		  markers.push(marker);
+
+		  bounds.extend(place.geometry.location);
+		  console.log("fkjnfdfd- " +  place.geometry.location);
+		  panorama.setPosition(place.geometry.location);
+		}
+		map.fitBounds(bounds);
+	  });
+	  // [END region_getplaces]
+
 	  // Setup the markers on the map
 	  var sharpedoMarker1 = new google.maps.Marker({
 		  position: sharpedo,
@@ -95,7 +145,15 @@ function initialize() {
 		infowindow.open(panorama, sharpedoMarker);
 		console.log("the event was fired.");
 	});
-	
+	google.maps.event.addListener(sharpedoMarker1, 'click', function() {
+	panorama.setPano('battle')
+	});
+	var panoOptions = {
+		//position: arenaBattle,
+		visible: true,
+		panoProvider: getCustomPanorama
+    };
+    panorama.setOptions(panoOptions);
 	//Google Places API below
 	function getIcon(types) {
 		switch(types) {
@@ -114,7 +172,7 @@ function initialize() {
 	}
 	
 	service = new google.maps.places.PlacesService(map);
-	service.nearbySearch(request, callback);
+	service.nearbySearch(request, callback);//call nearbysearch b/c is calls callback inside of the search box event listener. And declare var request further up pass for location: place.geometry.location
 	
 	function callback(results, status) {
 	//I must process all of the data from with the callback 
@@ -144,12 +202,66 @@ function initialize() {
 	}
 }
 
-function toggleStreetView() {
-  var toggle = panorama.getVisible();
-  if (toggle == false) {
-    panorama.setVisible(true);
-  } else {
-    panorama.setVisible(false);
+//Swap in Pokemon battle background for streetview
+function getCustomPanoramaTileUrl(pano, zoom, tileX, tileY) {
+  // Return a pano image given the panoID.
+  return 'http://images.eurogamer.net/articles//a/8/5/2/3/3/34779_3_A3_copie.jpg.jpg';
+}
+
+function getCustomPanorama(pano) {
+console.log("here");
+  switch (pano) {
+    case 'battle':
+      return {
+        location: {
+          pano: 'battle',
+          description: 'Google Sydney - battle',
+          latLng: new google.maps.LatLng(40.730031233910694, -73.99142861366272)
+        },
+        links: [],
+        // The text for the copyright control.
+        copyright: 'Imagery (c) 2010 Google',
+        // The definition of the tiles for this panorama.
+        tiles: {
+          tileSize: new google.maps.Size(1024, 512),
+          worldSize: new google.maps.Size(1024, 512),
+          // The heading at the origin of the panorama tile set.
+          centerHeading: 105,
+          getTileUrl: getCustomPanoramaTileUrl
+		  
+        }
+      };
+      break;
+    default:
+      return null;
+  }
+}
+
+function createCustomLinks(entryPanoId) {
+  var links = panorama.getLinks();
+  var panoId = panorama.getPano();
+  switch (panoId) {
+    case entryPanoId:
+      // Adding a link in the view from the entrance of the building to
+      // battle.
+      links.push({
+        heading: 25,
+        description: 'Google Sydney',
+        pano: 'battle'
+      });
+      break;
+    case 'battle':
+      // Adding a link in the view from the entrance of the office
+      // with an arrow pointing at 100 degrees, with a text of 'Exit'
+      // and loading the street entrance of the building pano on click.
+      links.push({
+        heading: 195,
+        description: 'Exit',
+        pano: entryPanoId
+      });
+      break;
+    default:
+      return;
   }
 }
 
