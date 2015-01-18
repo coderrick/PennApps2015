@@ -199,6 +199,13 @@ var arenaBattle = new google.maps.LatLng(39.95080436904778, -75.19529539419557);
 							title: data.title,
 							icon: getIcon(mapData.types[0])
 						});	
+						
+						var marker = new google.maps.Marker({
+							map: panorama, 
+							position: data.geometry.location,
+							title: data.title,
+							icon: getIcon(mapData.types[0])
+						});	
 						console.log("place:" + data.geometry.location);
 					}					
 				});
