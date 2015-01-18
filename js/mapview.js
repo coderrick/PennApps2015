@@ -23,7 +23,11 @@ var arenaBattle = new google.maps.LatLng(39.95080436904778, -75.19529539419557);
 	  var markers = [];
 	  map = new google.maps.Map(document.getElementById('map-canvas'),
 		  mapOptions);
-	  
+	  var request = {
+		location: upenn,
+		radius: '500',
+		types: ['hospital']
+	}
 	   //Initializing pano-canvas
 	   panoramaService = new google.maps.StreetViewService();
 	   panorama = new google.maps.StreetViewPanorama(document.getElementById("pano-canvas"));
@@ -71,9 +75,16 @@ var arenaBattle = new google.maps.LatLng(39.95080436904778, -75.19529539419557);
 		  }); */
 
 		  markers.push(marker);
+		  
 
 		  bounds.extend(place.geometry.location);
+		  request = {
+		location: place.geometry.location,
+		radius: '500',
+		types: ['hospital']
+	}
 		  console.log("fkjnfdfd- " +  place.geometry.location);
+		  service.nearbySearch(request, callback)
 		  panorama.setPosition(place.geometry.location);
 		}
 		map.fitBounds(bounds);
@@ -165,11 +176,7 @@ var arenaBattle = new google.maps.LatLng(39.95080436904778, -75.19529539419557);
 	}
 	geocoder = new google.maps.Geocoder();
 	
-	var request = {
-		location: upenn,
-		radius: '500',
-		types: ['hospital']
-	}
+	
 	
 	service = new google.maps.places.PlacesService(map);
 	service.nearbySearch(request, callback);//call nearbysearch b/c is calls callback inside of the search box event listener. And declare var request further up pass for location: place.geometry.location
