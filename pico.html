@@ -11,6 +11,16 @@
         margin: 0px;
         padding: 0px
       }
+	        #panel {
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        margin-left: -180px;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+      }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script>
@@ -101,15 +111,38 @@ function initialize() {
     }
   });
 });
-function toggleStreetView() {
-  var toggle = panorama.getVisible();
-  if (toggle == false) {
-    panorama.setVisible(true);
-  } else {
-    panorama.setVisible(false);
-  }
-}
-  
+ panorama = map.getStreetView();
+	getCustomPanorama('reception');
+  // Set up Street View and initially set it visible. Register the
+  // custom panorama provider function.
+  var panoOptions = {
+    position: sydneyOffice,
+    visible: true,
+    panoProvider: getCustomPanorama
+  };
+  panorama.setOptions(panoOptions);
+  panorama.setPov(/** @type {google.maps.StreetViewPov} */({
+    heading: 200,
+    pitch: 0
+  }));
+  // Create a StreetViewService object.
+  var streetviewService = new google.maps.StreetViewService();
+
+  // Compute the nearest panorama to the Google Sydney office
+  // using the service and store that pano ID.
+  var radius = 50;
+  streetviewService.getPanoramaByLocation(sydneyOffice, radius,
+      function(result, status) {
+    if (status == google.maps.StreetViewStatus.OK) {
+      // We'll monitor the links_changed event to check if the current
+      // pano is either a custom pano or our entry pano.
+      google.maps.event.addListener(panorama, 'links_changed',
+        function() {
+          createCustomLinks(result.location.pano);
+        });
+    }
+  });
+ 
 }
 
 function getCustomPanoramaTileUrl(pano, zoom, tileX, tileY) {
@@ -175,11 +208,22 @@ function createCustomLinks(entryPanoId) {
   }
 }
 
+function toggleStreetView() {
+  var toggle = panorama.getVisible();
+  if (toggle == false) {
+    panorama.setVisible(true);
+  } else {
+    panorama.setVisible(false);
+  }
+}
 google.maps.event.addDomListener(window, 'load', initialize);
 
     </script>
   </head>
   <body>
+      <div id="panel" style="margin-left:-100px">
+      <input type="button" value="Toggle Street View" onclick="toggleStreetView();"></input>
+    </div>
     <div id="map-canvas"></div>
   </body>
 </html>
