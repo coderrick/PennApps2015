@@ -30,16 +30,12 @@ var astorPlace = new google.maps.LatLng(40.729884, -73.990988);
 var busStop = new google.maps.LatLng(40.729559678851025, -73.99074196815491);
 var cafe = new google.maps.LatLng(40.730031233910694, -73.99142861366272);
 var bank = new google.maps.LatLng(40.72968163306612, -73.9911389350891);
-
-
 // The panorama that will be used as the entry point to the custom
 // panorama set.
 var entryPanoId = null;
-
 function initialize() {
   // The latlng of the entry point to the Google office on the road.
   var sydneyOffice = new google.maps.LatLng(40.730031233910694, -73.99142861366272);
-
   // Set up the map and enable the Street View control.
   var mapOptions = {
     center: sydneyOffice,
@@ -54,14 +50,12 @@ function initialize() {
       icon: 'xygifs/binacle.gif',//'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe|FFFF00',
       title: 'Binacle'//'cafe'
   });
-
   var bankMarker = new google.maps.Marker({
       position: bank,
       map: map,
       icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=dollar|FFFF00',
       title: 'Bank'
   });
-
   var busMarker = new google.maps.Marker({
       position: busStop,
       map: map,
@@ -79,40 +73,9 @@ function initialize() {
 	console.log("the event was fired.");
 });
   google.maps.event.addListener(binacleMarker, 'click', function() {
-	panorama = map.getStreetView();
-	getCustomPanorama('reception');
-  // Set up Street View and initially set it visible. Register the
-  // custom panorama provider function.
-  var panoOptions = {
-    position: sydneyOffice,
-    visible: true,
-    panoProvider: getCustomPanorama
-  };
-  panorama.setOptions(panoOptions);
-  panorama.setPov(/** @type {google.maps.StreetViewPov} */({
-    heading: 200,
-    pitch: 0
-  }));
-  // Create a StreetViewService object.
-  var streetviewService = new google.maps.StreetViewService();
-
-  // Compute the nearest panorama to the Google Sydney office
-  // using the service and store that pano ID.
-  var radius = 50;
-  streetviewService.getPanoramaByLocation(sydneyOffice, radius,
-      function(result, status) {
-    if (status == google.maps.StreetViewStatus.OK) {
-      // We'll monitor the links_changed event to check if the current
-      // pano is either a custom pano or our entry pano.
-      google.maps.event.addListener(panorama, 'links_changed',
-        function() {
-          createCustomLinks(result.location.pano);
-        });
-    }
-  });
-});
+	panorama.setPano('reception')
+	});
  panorama = map.getStreetView();
-	getCustomPanorama('reception');
   // Set up Street View and initially set it visible. Register the
   // custom panorama provider function.
   var panoOptions = {
@@ -127,7 +90,6 @@ function initialize() {
   }));
   // Create a StreetViewService object.
   var streetviewService = new google.maps.StreetViewService();
-
   // Compute the nearest panorama to the Google Sydney office
   // using the service and store that pano ID.
   var radius = 50;
@@ -136,17 +98,14 @@ function initialize() {
     if (status == google.maps.StreetViewStatus.OK) {
       // We'll monitor the links_changed event to check if the current
       // pano is either a custom pano or our entry pano.
-
     }
   });
  
 }
-
 function getCustomPanoramaTileUrl(pano, zoom, tileX, tileY) {
   // Return a pano image given the panoID.
   return 'http://images.eurogamer.net/articles//a/8/5/2/3/3/34779_3_A3_copie.jpg.jpg';
 }
-
 function getCustomPanorama(pano) {
 console.log("here");
   switch (pano) {
@@ -175,11 +134,9 @@ console.log("here");
       return null;
   }
 }
-
 function createCustomLinks(entryPanoId) {
   var links = panorama.getLinks();
   var panoId = panorama.getPano();
-
   switch (panoId) {
     case entryPanoId:
       // Adding a link in the view from the entrance of the building to
@@ -204,7 +161,6 @@ function createCustomLinks(entryPanoId) {
       return;
   }
 }
-
 function toggleStreetView() {
   var toggle = panorama.getVisible();
   if (toggle == false) {
@@ -214,7 +170,6 @@ function toggleStreetView() {
   }
 }
 google.maps.event.addDomListener(window, 'load', initialize);
-
     </script>
   </head>
   <body>
