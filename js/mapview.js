@@ -1,15 +1,15 @@
 var map;
 var panorama;
-var astorPlace = new google.maps.LatLng(40.729884, -73.990988);
-var busStop = new google.maps.LatLng(40.729559678851025, -73.99074196815491);
-var cafe = new google.maps.LatLng(40.730031233910694, -73.99142861366272);
-var bank = new google.maps.LatLng(40.72968163306612, -73.9911389350891);
+var upenn = new google.maps.LatLng(39.952219, -75.19321400000001);//(40.729884, -73.990988);//        
+var abra = new google.maps.LatLng(39.95080436904778, -75.19529539419557);//(40.729559678851025, -73.99074196815491);//
+var binacle = new google.maps.LatLng(39.95072212216224, -75.19469457937623);//(40.730031233910694, -73.99142861366272);//
+var chesnaught = new google.maps.LatLng(39.951815997650776, -75.19372898413087);//(40.72968163306612, -73.9911389350891);//
 
 function initialize() {
 
   // Set up the map
   var mapOptions = {
-    center: astorPlace,
+    center: upenn,
     zoom: 18,
     streetViewControl: true
   };
@@ -24,22 +24,36 @@ function initialize() {
    //streetView.setVisible( true );
 	
   // Setup the markers on the map
-  var binacleMarker = new google.maps.Marker({
-      position: cafe,
+  var binacleMarker1 = new google.maps.Marker({
+      position: binacle,
       map: panorama,//map, I HAVE TO FIGURE OUT A WAY TO ADD THE MARKER TO BOTH THE MAP AND STREETVIEW PANO
-      icon: 'xygifs/binacle.gif',//'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe|FFFF00',
-      title: 'Binacle'//'cafe'
+      icon: 'xygifs/binacle.gif',//'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=binacle|FFFF00',
+      title: 'Binacle'//'binacle'
+  });
+  
+  var binacleMarker2 = new google.maps.Marker({
+      position: binacle,
+      map: map,//map, I HAVE TO FIGURE OUT A WAY TO ADD THE MARKER TO BOTH THE MAP AND STREETVIEW PANO
+      icon: 'xygifs/binacle.gif',//'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=binacle|FFFF00',
+      title: 'Binacle'//'binacle'
   });
 
-  var bankMarker = new google.maps.Marker({
-      position: bank,
+  var chesnaughtMarker1 = new google.maps.Marker({
+      position: chesnaught,
       map: map,
-      icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=dollar|FFFF00',
-      title: 'Bank'
+      icon: 'xygifs/chesnaught.gif',
+      title: 'chesnaught'
+  });
+  
+  var chesnaughtMarker2 = new google.maps.Marker({
+      position: chesnaught,
+      map: panorama,
+      icon: 'xygifs/chesnaught.gif',
+      title: 'chesnaught'
   });
 
   var busMarker = new google.maps.Marker({
-      position: busStop,
+      position: abra,
       map: map,
       icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=bus|FFFF00',
       title: 'Bus Stop'
@@ -48,9 +62,9 @@ function initialize() {
   // We get the map's default panorama and set up some defaults.
   // Note that we don't yet set it visible.
   panorama = map.getStreetView();
-  panorama.setPosition(astorPlace);
+  panorama.setPosition(upenn);
   panorama.setPov(/** @type {google.maps.StreetViewPov} */({
-    heading: 265,
+    heading: 300,
     pitch: 0
   }));
   
@@ -61,6 +75,9 @@ function initialize() {
   google.maps.event.addListener(binacleMarker, 'mouseover', function() {
     infowindow.setContent("ROOAAAR!!!");
 	//Trigger audio through howlerjs here
+	var sound = new Howl({
+		urls: ['sfx/battle.mp3']
+	}).play();
 	infowindow.open(panorama, binacleMarker);
 	console.log("the event was fired.");
 });
