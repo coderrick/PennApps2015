@@ -37,6 +37,7 @@ function initialize() {
   };
   var map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
+	  map.setStreetView();
   var binacleMarker = new google.maps.Marker({
       position: cafe,
       map: map,
@@ -68,7 +69,8 @@ function initialize() {
 	console.log("the event was fired.");
 });
   google.maps.event.addListener(binacleMarker, 'click', function() {
-panorama = map.getStreetView();
+	panorama = map.getStreetView();
+	getCustomPanorama('reception');
   // Set up Street View and initially set it visible. Register the
   // custom panorama provider function.
   var panoOptions = {
@@ -115,7 +117,8 @@ function getCustomPanoramaTileUrl(pano, zoom, tileX, tileY) {
   return 'http://images.eurogamer.net/articles//a/8/5/2/3/3/34779_3_A3_copie.jpg.jpg';
 }
 
-function getCustomPanorama(pano) {console.log("here");
+function getCustomPanorama(pano) {
+console.log("here");
   switch (pano) {
     case 'reception':
       return {

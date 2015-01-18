@@ -112,19 +112,28 @@ function initialize() {
 	function callback(results, status) {
 	//I must process all of the data from with the callback 
 	    console.log(results);
-	    results.forEach(function(mapData,idx) {
-		    geocoder.geocode( { 'address': mapData.vicinity}, function(results, status) {
-				if (status == google.maps.GeocoderStatus.OK) {
-				console.log("index: " + idx + ", " + "type: " + mapData.types);
-					var marker = new google.maps.Marker({
-						map: map, 
-						position: mapData.geometry.location,
-						title: mapData.title,
-						icon: getIcon(mapData.types[0])
-					});	
-				}					
-			});
-		});
+		
+	    for(var i = 0; i < results.length; i++){
+		var mapData = results[i];
+		//function(mapData,idx) {
+		(function(data, idx){ //start wrapper code
+				 geocoder.geocode( { 'address': data.vicinity}, function(geodata, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						console.log("index: " + idx + ", " + "type: " + data.types);
+						
+						var marker = new google.maps.Marker({
+							map: map, 
+							position: data.geometry.location,
+							title: data.title,
+							icon: getIcon(mapData.types[0])
+						});	
+						console.log("place:" + data.geometry.location);
+					}					
+				});
+			
+		})(mapData, i);//passing in variable to var here
+		   
+		}
 	}
 }
 
