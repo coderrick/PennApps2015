@@ -153,7 +153,7 @@ var arenaBattle = new google.maps.LatLng(39.95080436904778, -75.19529539419557);
 		var sound = new Howl({
 			urls: ['sfx/battle.mp3']
 		}).play();
-		infowindow.open(panorama, sharpedoMarker);
+		infowindow.open(panorama, sharpedoMarker1);
 		console.log("the event was fired.");
 	});
 	google.maps.event.addListener(sharpedoMarker1, 'click', function() {
