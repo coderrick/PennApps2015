@@ -156,9 +156,39 @@ var arenaBattle = new google.maps.LatLng(39.95080436904778, -75.19529539419557);
 		infowindow.open(panorama, sharpedoMarker1);
 		console.log("the event was fired.");
 	});
+	
+	google.maps.event.addListener(chesnaughtMarker2, 'mouseover', function() {
+		infowindow.setContent("ROOAAAR!!!");
+		//Trigger audio through howlerjs here
+		var sound = new Howl({
+			urls: ['sfx/battle.mp3']
+		}).play();
+		infowindow.open(panorama, chesnaughtMarker2);
+		console.log("the event was fired.");
+	});
+	
+	google.maps.event.addListener(groudonMarker2, 'mouseover', function() {
+		infowindow.setContent("ROOAAAR!!!");
+		//Trigger audio through howlerjs here
+		var sound = new Howl({
+			urls: ['sfx/battle.mp3']
+		}).play();
+		infowindow.open(panorama, groudonMarker2);
+		console.log("the event was fired.");
+	});
+	
 	google.maps.event.addListener(sharpedoMarker1, 'click', function() {
 	panorama.setPano('battle')
 	});
+	
+	google.maps.event.addListener(chesnaughtMarker2, 'click', function() {
+	panorama.setPano('battle')
+	});
+	
+	google.maps.event.addListener(groudonMarker2, 'click', function() {
+	panorama.setPano('battle')
+	});
+	
 	var panoOptions = {
 		//position: arenaBattle,
 		visible: true,
